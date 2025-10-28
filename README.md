@@ -7,7 +7,8 @@
    - `scripts` directory
 - It is synced with a github repo by the sane mane
 - In its current form it only works with the ANthropic API key, so not with a Calude Max subscription
-- The key is read out of the environment, it is not present in the repo
+- Make sure you exlude .env and agents/ in .gitignore
+- The key is in the .env file
 - To test enter an issue and make sure it can be classified by the workflow
 - run `uv safasdf` 
 
