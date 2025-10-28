@@ -44,7 +44,7 @@ def setup_logger(adw_id: str, trigger_type: str = "adw_plan_build") -> logging.L
     logger.handlers.clear()
     
     # File handler - captures everything
-    file_handler = logging.FileHandler(log_file, mode='a')
+    file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)
     
     # Console handler - INFO and above
@@ -196,6 +196,22 @@ def get_safe_subprocess_env() -> Dict[str, str]:
         "TERM": os.getenv("TERM"),
         "LANG": os.getenv("LANG"),
         "LC_ALL": os.getenv("LC_ALL"),
+        
+        # Windows-specific environment variables (needed for DLL loading)
+        "SYSTEMROOT": os.getenv("SYSTEMROOT"),
+        "WINDIR": os.getenv("WINDIR"),
+        "TEMP": os.getenv("TEMP"),
+        "TMP": os.getenv("TMP"),
+        "PATHEXT": os.getenv("PATHEXT"),
+        "COMSPEC": os.getenv("COMSPEC"),   
+        
+         # Windows user profile variables (needed for config/cache access)
+         "USERPROFILE": os.getenv("USERPROFILE"),
+         "USERNAME": os.getenv("USERNAME"),
+         "HOMEDRIVE": os.getenv("HOMEDRIVE"),
+         "HOMEPATH": os.getenv("HOMEPATH"),
+         "APPDATA": os.getenv("APPDATA"),
+         "LOCALAPPDATA": os.getenv("LOCALAPPDATA"),             
         
         # Python-specific variables that subprocesses might need
         "PYTHONPATH": os.getenv("PYTHONPATH"),

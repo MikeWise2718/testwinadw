@@ -68,6 +68,7 @@ def get_model_for_slash_command(slash_command: str, default: str = "sonnet") -> 
 def check_claude_installed() -> Optional[str]:
     """Check if Claude Code CLI is installed. Return error message if not."""
     try:
+        print("CLAUDE_PATH:",CLAUDE_PATH)
         result = subprocess.run(
             [CLAUDE_PATH, "--version"], capture_output=True, text=True
         )
@@ -189,10 +190,26 @@ def prompt_claude_code(request: AgentPromptRequest) -> AgentPromptResponse:
         os.makedirs(output_dir, exist_ok=True)
 
     # Build command - always use stream-json format and verbose
+    print("request.prompt:",request.prompt)
     cmd = [CLAUDE_PATH, "-p", request.prompt]
     cmd.extend(["--model", request.model])
     cmd.extend(["--output-format", "stream-json"])
     cmd.append("--verbose")
+    
+    # pprompt = '/classify_issue "request - add an exclamation point to the output"'
+    # pprompt = 'hello'
+    # path = CLAUDE_PATH
+    # path = "C:/Users/mike/.local/bin/claude.exe"
+    # path = "claude"
+    # cmd = [
+    #     path,
+    #     "-p", pprompt,
+    #     "--model", request.model,
+    #     "--output-format", "stream-json",
+    #     "--verbose"
+    # ]
+    # print(cmd)
+    
 
     # Add dangerous skip permissions flag if enabled
     if request.dangerously_skip_permissions:
@@ -200,13 +217,29 @@ def prompt_claude_code(request: AgentPromptRequest) -> AgentPromptResponse:
 
     # Set up environment with only required variables
     env = get_claude_env()
+    # print("====== start of env =========")
+    # print(env)
+    # print("====== end of env =========")
 
     try:
         # Execute Claude Code and pipe output to file
         with open(request.output_file, "w") as f:
-            result = subprocess.run(
-                cmd, stdout=f, stderr=subprocess.PIPE, text=True, env=env
-            )
+             result = subprocess.run(
+                 cmd, stdout=f, stderr=subprocess.PIPE, text=True, env=env
+           )
+#        result = subprocess.run(
+#            cmd,
+#            env=env,
+#            stdout=subprocess.PIPE,
+#            stderr=subprocess.PIPE,
+#            text=True
+#         )
+            
+        print(cmd)
+        print(f"result.returncode: {result.returncode}")
+        print(f"---------- stdout: {result.stdout}")
+        print(f"---------- stderr: {result.stderr}")            
+        print(result)
 
         if result.returncode == 0:
             print(f"Output saved to: {request.output_file}")
@@ -286,6 +319,7 @@ def execute_template(request: AgentTemplateRequest) -> AgentPromptResponse:
     output_file = os.path.join(output_dir, "raw_output.jsonl")
 
     # Create prompt request with specific parameters
+    
     prompt_request = AgentPromptRequest(
         prompt=prompt,
         adw_id=request.adw_id,
