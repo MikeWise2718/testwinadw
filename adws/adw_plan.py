@@ -96,6 +96,7 @@ def main():
     logger.info(f"ADW Plan starting - ID: {adw_id}, Issue: {issue_number}")
 
     # Validate environment
+    print("----------------- validating environment ----------------------")
     check_env_vars(logger)
 
     # Get repo information
@@ -107,9 +108,11 @@ def main():
         sys.exit(1)
 
     # Fetch issue details
+    print("----------------- Fetch issue ----------------------")
     issue: GitHubIssue = fetch_issue(issue_number, repo_path)
 
     logger.debug(f"Fetched issue: {issue.model_dump_json(indent=2, by_alias=True)}")
+    print("----------------- make_issue_comment  ----------------------")
     make_issue_comment(
         issue_number, format_issue_message(adw_id, "ops", "✅ Starting planning phase")
     )
@@ -120,6 +123,8 @@ def main():
     )
 
     # Classify the issue
+    print("----------------- Classify issue ----------------------")
+    
     issue_command, error = classify_issue(issue, adw_id, logger)
 
     if error:

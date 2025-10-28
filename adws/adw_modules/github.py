@@ -78,6 +78,7 @@ def extract_repo_path(github_url: str) -> str:
 
 def fetch_issue(issue_number: str, repo_path: str) -> GitHubIssue:
     """Fetch GitHub issue using gh CLI and return typed model."""
+    print("fetch_issue start")
     # Use JSON output for structured data
     cmd = [
         "gh",
@@ -89,16 +90,20 @@ def fetch_issue(issue_number: str, repo_path: str) -> GitHubIssue:
         "--json",
         "number,title,body,state,author,assignees,labels,milestone,comments,createdAt,updatedAt,closedAt,url",
     ]
-
+    print("setup environment")
     # Set up environment with GitHub token if available
     env = get_github_env()
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
+        print("subprocess run")
+        result = subprocess.run(cmd, capture_output=True, text=True, env=env, encoding='utf-8')
 
         if result.returncode == 0:
             # Parse JSON response into Pydantic model
+            print("json.loads")
+            
             issue_data = json.loads(result.stdout)
+            print("GitHubIssue")
             issue = GitHubIssue(**issue_data)
 
             return issue

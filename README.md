@@ -18,3 +18,11 @@
   -  It will automatically process:
      - New issues with no comments
      - Issues where latest comment is "adw"
+     
+     
+# Changes
+- Windows use an different codepage by delete cp1254 or something.
+- utils.py - made logging open the file with utf-8 page
+- github.py - line 99 - result = subprocess.run(cmd, capture_output=True, text=True, env=env, encoding='utf-8')
+- utils.py - added windows environmental variables
+- agents.py - don't think any changes were necessary, but made a lot of debugging changes, so not sure
