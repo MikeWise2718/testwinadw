@@ -20,9 +20,28 @@
      - Issues where latest comment is "adw"
      
      
-# Changes
+# Changes to make windows work
 - Windows use an different codepage by delete cp1254 or something.
-- utils.py - made logging open the file with utf-8 page
+- utils.py -  line 47   file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
 - github.py - line 99 - result = subprocess.run(cmd, capture_output=True, text=True, env=env, encoding='utf-8')
 - utils.py - added windows environmental variables
+added these lines:
+```
+        # Windows-specific environment variables (needed for DLL loading)
+        "SYSTEMROOT": os.getenv("SYSTEMROOT"),
+        "WINDIR": os.getenv("WINDIR"),
+        "TEMP": os.getenv("TEMP"),
+        "TMP": os.getenv("TMP"),
+        "PATHEXT": os.getenv("PATHEXT"),
+        "COMSPEC": os.getenv("COMSPEC"),   
+        
+         # Windows user profile variables (needed for config/cache access)
+         "USERPROFILE": os.getenv("USERPROFILE"),
+         "USERNAME": os.getenv("USERNAME"),
+         "HOMEDRIVE": os.getenv("HOMEDRIVE"),
+         "HOMEPATH": os.getenv("HOMEPATH"),
+         "APPDATA": os.getenv("APPDATA"),
+         "LOCALAPPDATA": os.getenv("LOCALAPPDATA"),                     
+```
+- API key was broken somehow by copy and pasting
 - agents.py - don't think any changes were necessary, but made a lot of debugging changes, so not sure
