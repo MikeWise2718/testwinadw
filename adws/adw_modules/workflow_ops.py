@@ -45,6 +45,15 @@ def format_issue_message(
     adw_id: str, agent_name: str, message: str, session_id: Optional[str] = None
 ) -> str:
     """Format a message for issue comments with ADW tracking and bot identifier."""
+    # Add exclamation point if message doesn't already end with punctuation
+    if message:
+        # Check if message ends with punctuation (., !, ?, :, ;)
+        if not message.rstrip().endswith(('.', '!', '?', ':', ';')):
+            message = message.rstrip() + '!'
+        # Replace period with exclamation point for more enthusiasm
+        elif message.rstrip().endswith('.'):
+            message = message.rstrip()[:-1] + '!'
+
     # Always include ADW_BOT_IDENTIFIER to prevent webhook loops
     if session_id:
         return f"{ADW_BOT_IDENTIFIER} {adw_id}_{agent_name}_{session_id}: {message}"
