@@ -216,7 +216,8 @@ def get_safe_subprocess_env() -> Dict[str, str]:
         # Python-specific variables that subprocesses might need
         "PYTHONPATH": os.getenv("PYTHONPATH"),
         "PYTHONUNBUFFERED": "1",  # Useful for subprocess output
-        
+        "PYTHONUTF8": os.getenv("PYTHONUTF8", "1"),  # Force UTF-8 encoding on Windows
+
         # Working directory tracking
         "PWD": os.getcwd(),
     }
